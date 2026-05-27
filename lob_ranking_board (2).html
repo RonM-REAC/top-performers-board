@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOB Performance Rankings</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #030a14; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+
+  .fb { font-family: 'Rajdhani', sans-serif; background: #030a14; width: 100%; max-width: 760px; padding: 1.8rem 1.2rem 2.2rem; position: relative; overflow: hidden; border-radius: 12px; border: 1px solid rgba(0,200,255,0.08); }
+  .fb::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(0,200,255,0.07) 0%, transparent 70%), radial-gradient(ellipse 60% 30% at 10% 80%, rgba(120,0,255,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 30% at 90% 80%, rgba(0,255,160,0.05) 0%, transparent 60%); pointer-events: none; }
+  .gl { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+  .sl { position: absolute; left: 0; right: 0; height: 60px; background: linear-gradient(180deg, transparent, rgba(0,200,255,0.03), transparent); animation: scan 6s linear infinite; pointer-events: none; }
+  @keyframes scan { from { top: -60px; } to { top: 100%; } }
+  .pt { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .pc { position: absolute; width: 2px; height: 2px; border-radius: 50%; animation: flt linear infinite; opacity: 0; }
+  @keyframes flt { 0% { transform: translateY(100%); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.3; } 100% { transform: translateY(-20px); opacity: 0; } }
+
+  .bt { font-family: 'Orbitron', sans-serif; text-align: center; font-size: clamp(.8rem, 2vw, 1.1rem); font-weight: 900; letter-spacing: .3em; color: #00c8ff; text-transform: uppercase; margin-bottom: .2rem; text-shadow: 0 0 20px rgba(0,200,255,.5); }
+  .bs { text-align: center; font-size: .72rem; letter-spacing: .2em; color: rgba(0,200,255,.4); margin-bottom: 1.8rem; text-transform: uppercase; }
+
+  .lc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; }
+  .lob { display: flex; flex-direction: column; gap: .5rem; }
+
+  .lh { text-align: center; padding: .55rem .4rem .45rem; border-radius: 8px; margin-bottom: .25rem; position: relative; overflow: hidden; }
+  .lh::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
+  .foc .lh { background: rgba(0,200,255,.08); border: 1px solid rgba(0,200,255,.2); }
+  .foc .lh::before { background: linear-gradient(90deg, transparent, #00c8ff, transparent); }
+  .foc .hn { color: #00c8ff; text-shadow: 0 0 12px rgba(0,200,255,.6); }
+  .vob .lh { background: rgba(160,80,255,.08); border: 1px solid rgba(160,80,255,.2); }
+  .vob .lh::before { background: linear-gradient(90deg, transparent, #a050ff, transparent); }
+  .vob .hn { color: #a050ff; text-shadow: 0 0 12px rgba(160,80,255,.6); }
+  .bil .lh { background: rgba(0,255,160,.08); border: 1px solid rgba(0,255,160,.2); }
+  .bil .lh::before { background: linear-gradient(90deg, transparent, #00ffa0, transparent); }
+  .bil .hn { color: #00ffa0; text-shadow: 0 0 12px rgba(0,255,160,.6); }
+  .hn { font-family: 'Orbitron', sans-serif; font-size: clamp(.6rem, 1.5vw, .75rem); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+  .hl { font-size: .58rem; letter-spacing: .1em; color: rgba(255,255,255,.3); margin-top: 2px; text-transform: uppercase; }
+
+  .rc { position: relative; padding: .6rem .7rem; border-radius: 8px; cursor: pointer; transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease; overflow: visible; background: rgba(255,255,255,.03); }
+  .rc::after { content: ''; position: absolute; inset: 0; border-radius: 8px; opacity: 0; transition: opacity .25s ease; }
+  .rc:hover { transform: scale(1.04) translateY(-2px); }
+  .foc .rc { border: 1px solid rgba(0,200,255,.15); }
+  .foc .rc::after { background: rgba(0,200,255,.06); }
+  .foc .rc:hover { box-shadow: 0 0 18px rgba(0,200,255,.25), 0 0 36px rgba(0,200,255,.1); border-color: rgba(0,200,255,.5); }
+  .foc .rc:hover::after { opacity: 1; }
+  .vob .rc { border: 1px solid rgba(160,80,255,.15); }
+  .vob .rc::after { background: rgba(160,80,255,.06); }
+  .vob .rc:hover { box-shadow: 0 0 18px rgba(160,80,255,.25), 0 0 36px rgba(160,80,255,.1); border-color: rgba(160,80,255,.5); }
+  .vob .rc:hover::after { opacity: 1; }
+  .bil .rc { border: 1px solid rgba(0,255,160,.15); }
+  .bil .rc::after { background: rgba(0,255,160,.06); }
+  .bil .rc:hover { box-shadow: 0 0 18px rgba(0,255,160,.25), 0 0 36px rgba(0,255,160,.1); border-color: rgba(0,255,160,.5); }
+  .bil .rc:hover::after { opacity: 1; }
+
+  .ri { display: flex; align-items: center; gap: .5rem; position: relative; z-index: 1; }
+  .rn { font-family: 'Orbitron', sans-serif; font-size: clamp(.9rem, 2vw, 1.3rem); font-weight: 900; min-width: 28px; line-height: 1; }
+  .r1 .rn { color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,.6); }
+  .r2 .rn { color: #C0C0C0; text-shadow: 0 0 8px rgba(192,192,192,.4); }
+  .r3 .rn { color: #CD7F32; text-shadow: 0 0 8px rgba(205,127,50,.4); }
+
+  .av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .58rem; letter-spacing: .03em; flex-shrink: 0; transition: box-shadow .25s ease; }
+  .foc .av { background: rgba(0,200,255,.15); color: #00c8ff; border: 1px solid rgba(0,200,255,.3); }
+  .foc .rc:hover .av { box-shadow: 0 0 12px rgba(0,200,255,.5); }
+  .vob .av { background: rgba(160,80,255,.15); color: #a050ff; border: 1px solid rgba(160,80,255,.3); }
+  .vob .rc:hover .av { box-shadow: 0 0 12px rgba(160,80,255,.5); }
+  .bil .av { background: rgba(0,255,160,.15); color: #00ffa0; border: 1px solid rgba(0,255,160,.3); }
+  .bil .rc:hover .av { box-shadow: 0 0 12px rgba(0,255,160,.5); }
+  .r1 .av { border-color: rgba(255,215,0,.5); }
+
+  .inf { flex: 1; min-width: 0; }
+  .nm { font-size: clamp(.68rem, 1.6vw, .82rem); font-weight: 600; color: rgba(255,255,255,.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .03em; transition: color .2s ease; }
+  .rc:hover .nm { color: #fff; }
+  .sl2 { font-size: .56rem; letter-spacing: .08em; color: rgba(255,255,255,.25); text-transform: uppercase; margin-top: 1px; }
+  .bw { margin-top: 4px; height: 2px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
+  .br { height: 100%; border-radius: 2px; }
+  .foc .br { background: linear-gradient(90deg, rgba(0,200,255,.3), #00c8ff); }
+  .vob .br { background: linear-gradient(90deg, rgba(160,80,255,.3), #a050ff); }
+  .bil .br { background: linear-gradient(90deg, rgba(0,255,160,.3), #00ffa0); }
+  .bd { font-size: .52rem; padding: 2px 5px; border-radius: 4px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; flex-shrink: 0; background: rgba(255,215,0,.15); color: #FFD700; border: 1px solid rgba(255,215,0,.3); }
+
+  .tt { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: rgba(3,10,20,.95); border-radius: 8px; padding: .45rem .65rem; white-space: nowrap; z-index: 200; pointer-events: none; font-size: .66rem; color: rgba(255,255,255,.8); letter-spacing: .06em; }
+  .rc:hover .tt { display: block; }
+  .foc .rc .tt { border: 1px solid rgba(0,200,255,.35); box-shadow: 0 0 16px rgba(0,200,255,.2); }
+  .vob .rc .tt { border: 1px solid rgba(160,80,255,.4); box-shadow: 0 0 16px rgba(160,80,255,.2); }
+  .bil .rc .tt { border: 1px solid rgba(0,255,160,.4); box-shadow: 0 0 16px rgba(0,255,160,.2); }
+
+  .dv { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,200,255,.15), rgba(160,80,255,.15), rgba(0,255,160,.15), transparent); margin: 1.4rem 0 .9rem; }
+  .fl { text-align: center; font-size: .58rem; letter-spacing: .18em; color: rgba(255,255,255,.15); text-transform: uppercase; }
+  .pd { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #00c8ff; margin-right: 6px; vertical-align: middle; animation: pa 2s ease-in-out infinite; }
+  @keyframes pa { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,200,255,.5); } 50% { opacity: .5; box-shadow: 0 0 0 4px rgba(0,200,255,0); } }
+</style>
+</head>
+<body>
+
+<div class="fb">
+  <div class="gl"></div>
+  <div class="sl"></div>
+  <div class="pt" id="pt"></div>
+
+  <div class="bt">Performance Rankings</div>
+  <div class="bs"><span class="pd"></span>Live Leaderboard · 2025</div>
+
+  <div class="lc">
+
+    <!-- ===== FOC ===== -->
+    <div class="lob foc">
+      <div class="lh">
+        <div class="hn">FOC</div>
+        <div class="hl">Front Office Coordinator</div>
+      </div>
+      <div class="rc r1">
+        <div class="ri">
+          <div class="rn">01</div>
+          <div class="av">MCP</div>
+          <div class="inf">
+            <div class="nm">Maria C. Pancho</div>
+            <div class="bw"><div class="br" style="width:98.71%"></div></div>
+            <div class="sl2">Score · 98.71%</div>
+          </div>
+          <div class="bd">TOP</div>
+        </div>
+        <div class="tt">Maria C. Pancho · FOC #1 · 98.71%</div>
+      </div>
+      <div class="rc r2">
+        <div class="ri">
+          <div class="rn">02</div>
+          <div class="av">JWM</div>
+          <div class="inf">
+            <div class="nm">John W. Madreo</div>
+            <div class="bw"><div class="br" style="width:98.27%"></div></div>
+            <div class="sl2">Score · 98.27%</div>
+          </div>
+        </div>
+        <div class="tt">John W. Madreo · FOC #2 · 98.27%</div>
+      </div>
+      <div class="rc r3">
+        <div class="ri">
+          <div class="rn">03</div>
+          <div class="av">CAD</div>
+          <div class="inf">
+            <div class="nm">Claire A. Dingal</div>
+            <div class="bw"><div class="br" style="width:97.16%"></div></div>
+            <div class="sl2">Score · 97.16%</div>
+          </div>
+        </div>
+        <div class="tt">Claire A. Dingal · FOC #3 · 97.16%</div>
+      </div>
+    </div>
+
+    <!-- ===== VOB ===== -->
+    <div class="lob vob">
+      <div class="lh">
+        <div class="hn">VOB</div>
+        <div class="hl">Verification of Benefits</div>
+      </div>
+      <div class="rc r1">
+        <div class="ri">
+          <div class="rn">01</div>
+          <div class="av">GP</div>
+          <div class="inf">
+            <div class="nm">Gemma Palisoc</div>
+            <div class="bw"><div class="br" style="width:99.23%"></div></div>
+            <div class="sl2">Score · 99.23%</div>
+          </div>
+          <div class="bd">TOP</div>
+        </div>
+        <div class="tt">Gemma Palisoc · VOB #1 · 99.23%</div>
+      </div>
+      <div class="rc r2">
+        <div class="ri">
+          <div class="rn">02</div>
+          <div class="av">RB</div>
+          <div class="inf">
+            <div class="nm">Raymond Banania</div>
+            <div class="bw"><div class="br" style="width:98.12%"></div></div>
+            <div class="sl2">Score · 98.12%</div>
+          </div>
+        </div>
+        <div class="tt">Raymond Banania · VOB #2 · 98.12%</div>
+      </div>
+      <div class="rc r3">
+        <div class="ri">
+          <div class="rn">03</div>
+          <div class="av">HJM</div>
+          <div class="inf">
+            <div class="nm">Hennie J. Mendoza</div>
+            <div class="bw"><div class="br" style="width:97.61%"></div></div>
+            <div class="sl2">Score · 97.61%</div>
+          </div>
+        </div>
+        <div class="tt">Hennie J. Mendoza · VOB #3 · 97.61%</div>
+      </div>
+    </div>
+
+    <!-- ===== BILLING ===== -->
+    <div class="lob bil">
+      <div class="lh">
+        <div class="hn">Billing</div>
+        <div class="hl">Billing Operations</div>
+      </div>
+      <div class="rc r1">
+        <div class="ri">
+          <div class="rn">01</div>
+          <div class="av">HI</div>
+          <div class="inf">
+            <div class="nm">Hedrix Iguid</div>
+            <div class="bw"><div class="br" style="width:99.89%"></div></div>
+            <div class="sl2">Score · 99.89%</div>
+          </div>
+          <div class="bd">TOP</div>
+        </div>
+        <div class="tt">Hedrix Iguid · Billing #1 · 99.89%</div>
+      </div>
+      <div class="rc r2">
+        <div class="ri">
+          <div class="rn">02</div>
+          <div class="av">JAC</div>
+          <div class="inf">
+            <div class="nm">Jun A. Cambal</div>
+            <div class="bw"><div class="br" style="width:99.56%"></div></div>
+            <div class="sl2">Score · 99.56%</div>
+          </div>
+        </div>
+        <div class="tt">Jun A. Cambal · Billing #2 · 99.56%</div>
+      </div>
+      <div class="rc r3">
+        <div class="ri">
+          <div class="rn">03</div>
+          <div class="av">JRS</div>
+          <div class="inf">
+            <div class="nm">John R. Santos</div>
+            <div class="bw"><div class="br" style="width:99.21%"></div></div>
+            <div class="sl2">Score · 99.21%</div>
+          </div>
+        </div>
+        <div class="tt">John R. Santos · Billing #3 · 99.21%</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="dv"></div>
+  <div class="fl">hover over any agent to reveal performance details</div>
+</div>
+
+<script>
+  const colors = ['#00c8ff','#a050ff','#00ffa0','#FFD700'];
+  const container = document.getElementById('pt');
+  for (let i = 0; i < 18; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'pc';
+    dot.style.left = Math.random() * 100 + '%';
+    dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+    dot.style.animationDuration = (4 + Math.random() * 8) + 's';
+    dot.style.animationDelay = (Math.random() * 8) + 's';
+    container.appendChild(dot);
+  }
+</script>
+
+</body>
+</html>
